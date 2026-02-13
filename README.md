@@ -1,10 +1,10 @@
-# SplaT Middleware Protocol v2.0.0 Specification
+# LIONS Middleware Protocol v2.0.0 Specification
 
 **Last Updated: January 16th, 2026**
 
-This document describes the SplaT Middleware Protocol (STMP).
+This document describes the LIONS Middleware Protocol (LMP). The protocol that powers the LIONS distributed system.
 
-STMP is used to build all the network applications I run which require communication with each other.
+LMP is used to build all the network applications I run which require communication with each other.
 
 ## Packet Structure
 
@@ -16,7 +16,7 @@ STMP is used to build all the network applications I run which require communica
 
 ## Header
 
-STMP's packet header is **4 bytes**
+LMP's packet header is **4 bytes**
 
 ```
 +------------------+---------------+-------------------+----------------+
@@ -26,12 +26,12 @@ STMP's packet header is **4 bytes**
 
 ### Version
 
-STMP's current version is **2.0.0**. This is represented by the byte **0x02**. Versions below
+LMP's current version is **2.0.0**. This is represented by the byte **0x02**. Versions below
 would be specified as **0x01** for version 1.0.0, etc.
 
 ### Type
 
-STMP supports five types of messages.
+LMP supports five types of messages.
 
 | Type | Byte | Description |
 |:--:|:--:|:--:|
@@ -46,7 +46,7 @@ an implementation, but ultimately up to you to use.
 
 ### Argument
 
-For each **message type**, STMP requires a single **argument**. Below is a detailed list of the
+For each **message type**, LMP requires a single **argument**. Below is a detailed list of the
 arguments supported for each message type.
 
 **INIT**
@@ -88,17 +88,17 @@ arguments supported for each message type.
 
 ### Flags
 
-An STMP flags header byte is 1 byte, but is used for bitwise operations up to the implementation.
+An LMP flags header byte is 1 byte, but is used for bitwise operations up to the implementation.
 
 You can have up to eight different flags per packet. For example, if you use the the hexadecimal value
 **0x07** to represent the bits **111**. You can use operations like `(1 << 0)` and `(1 << 1)` to define flags.
 
 ### Payload
 
-Every STMP packet has a payload that can be at most 1496 bytes. Certain message types require an
+Every LMP packet has a payload that can be at most 1496 bytes. Certain message types require an
 empty payload. The maximum payload size ensures packets fit within a 1500 byte MTU.
 
-Every STMP packet includes a payload of at least one byte. An "empty payload" is represented by a
+Every LMP packet includes a payload of at least one byte. An "empty payload" is represented by a
 single byte with the value `0x00`.
 
 The message types that require an empty payload are **INIT** and **INVALID**.
@@ -107,18 +107,18 @@ Payloads are binary data. Interpretation of payload contents is left to the appl
 
 ### Packet Termination
 
-**Every** STMP packet is terminated by the byte **0x7F**, DEL in ASCII.
+**Every** LMP packet is terminated by the byte **0x7F**, DEL in ASCII.
 
 The termination byte is not part of the payload.
 
 ### Memory Ownership
 
-STMP does not allocate memory for packet payloads.
+LMP does not allocate memory for packet payloads.
 
-After deserialization, `stmp_packet.payload` points directly into the caller-provided buffer.
+After deserialization, `lmp_packet.payload` points directly into the caller-provided buffer.
 The buffer **must remain valid** for as long as the packet is in use.
 
-Do **not** call `free()` on `stmp_packet.payload`.
+Do **not** call `free()` on `lmp_packet.payload`.
 
 If ownership is required, the caller must explicitly copy the payload.
 
