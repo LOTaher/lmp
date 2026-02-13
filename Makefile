@@ -1,9 +1,9 @@
 CFLAGS = -Wextra -Wall -pedantic -std=gnu99 -g
 
-all: clean stmp
+all: lmp
 
-stmp:
-	gcc -c $(CFLAGS) stmp.c -o stmp.o
+lmp:
+	gcc -c $(CFLAGS) ./src/lmp.c -o lmp.o
 
 clean:
-	rm stmp.o libstmp
+	rm lmp.o
